@@ -11,6 +11,18 @@ fn manipulando_arrays() {
 
     // Cria um array com 4 posições e preenche com o valor 8.5
     // let notas : [f32; 4] = [8.5; 4];
+    
+    /*
+    Para acessar endereço de memória de um array, como é o caso do indice 0, usamos a sintaxe abaixo com usize
+    ou seja, 4 bytes em sistemas 32 bits e 8 bytes em sistemas 64 bits.
+    usize e isize possuem o tamanho necessário para armazenar um endereço de memória, 
+
+    Para garantir que conseguimos representar todos os índices possíveis de um array em memória, 
+    por exemplo, e até para lidarmos com ponteiros, precisamos usar estes tipos.
+    */
+    let inteiro : usize = 0;
+
+    println!("A nota é: {}", notas[inteiro]);
 
     for nota in notas {
         println!("Nota: {}", nota);
