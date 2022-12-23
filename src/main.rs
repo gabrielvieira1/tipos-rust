@@ -13,6 +13,7 @@ fn main() {
     cores();
     conteudo_opcional();
     vectors();
+    conta_corrente();
 }
 
 fn manipulando_arrays() {
@@ -166,11 +167,11 @@ fn vectors() {
     // Para evitar ao maximo novas alocações de memória, podemos definir a capacidade inicial do vetor.
     // A função with_capacity define a capacidade inicial do vetor.
     /*
-    Alocar memória na heap é um processo custoso, então evitar esse processo é necessário. 
+    Alocar memória na heap é um processo custoso, então evitar esse processo é necessário.
     PS.: Além de alocar a memória, esse processo também demanda a cópia dos dados de um endereço para outro (o que não é tão custoso assim).
     */
     // Alocar um vetor com capacidade inicial de 5 elementos.
-    let mut notas: Vec<f32> = Vec::with_capacity(5); 
+    let mut notas: Vec<f32> = Vec::with_capacity(5);
     notas.push(10.0);
     notas.push(20.0);
     notas.push(30.0);
@@ -225,11 +226,61 @@ fn vectors() {
         *nota *= 2.0;
     }
 
-    // Para que o Vec seja percorrido, uma função chamada into_iter é chamada recebendo o Vec por parâmetro, 
+    // Para que o Vec seja percorrido, uma função chamada into_iter é chamada recebendo o Vec por parâmetro,
     // logo, o borrowing precisa ser levado em consideração.
     for nota in &notas {
         println!("Nota no for borrowing: {}", nota);
     }
 
     println!("Vetor: {:?}", notas);
+}
+
+fn conta_corrente() {
+    let titular = Titular {
+        nome: String::from("Gabriel"),
+        sobrenome: String::from("Vieira"),
+    };
+    // Se a referência for mutável, precisamos definir a variável como mutável.
+    let mut conta: Conta = Conta {
+        /*titular: Titular {
+            nome: String::from("Gabriel"),
+            sobrenome: String::from("Vieira"),
+        },*/
+        titular,
+        saldo: 100.0,
+    };
+
+    conta.depositar(10.0);
+    conta.sacar(50.0);
+
+    println!(
+        "Dados da conta: Titular: {} {}, Saldo: {}",
+        conta.titular.nome, conta.titular.sobrenome, conta.saldo
+    );
+    //println!("Conta: {:?}", conta);
+
+
+}
+
+struct Conta {
+    titular: Titular,
+    saldo: f32,
+}
+
+// Implementação de métodos para a struct Conta.
+impl Conta {
+    fn depositar(&mut self, valor: f32) {
+        self.saldo += valor;
+    }
+
+    // O &mut self é para indicar que o método irá alterar o valor do objeto.
+    // O self é para indicar que o método irá consumir o objeto.
+    fn sacar(&mut self, valor: f32) {
+        self.saldo -= valor;
+    }
+}
+
+struct Titular {
+    nome: String,
+    sobrenome: String,
 }
