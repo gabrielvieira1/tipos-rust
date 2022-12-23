@@ -12,6 +12,7 @@ fn main() {
     println!("Fim de semana: {}", eh_fim_de_semana(DiaDaSemana::Quarta));
     cores();
     conteudo_opcional();
+    vectors();
 }
 
 fn manipulando_arrays() {
@@ -155,4 +156,80 @@ fn ler_arquivo(nome_arquivo: String) -> Option<String> {
     } else {
         None
     }
+}
+
+fn vectors() {
+    //let mut notas: Vec<i32> = Vec::new();
+
+    //let mut notas: Vec<f32> = vec![10.0, 20.0, 30.0];
+
+    // Para evitar ao maximo novas alocações de memória, podemos definir a capacidade inicial do vetor.
+    // A função with_capacity define a capacidade inicial do vetor.
+    /*
+    Alocar memória na heap é um processo custoso, então evitar esse processo é necessário. 
+    PS.: Além de alocar a memória, esse processo também demanda a cópia dos dados de um endereço para outro (o que não é tão custoso assim).
+    */
+    // Alocar um vetor com capacidade inicial de 5 elementos.
+    let mut notas: Vec<f32> = Vec::with_capacity(5); 
+    notas.push(10.0);
+    notas.push(20.0);
+    notas.push(30.0);
+
+    println!("Capacidade: {}", notas.capacity());
+    println!("Vetor: {:?}", notas);
+
+    // A função push exige que a variável a ser alterada seja mutável (definida com let mut).
+    notas.push(40.0);
+    notas.push(50.0);
+    // A capacidade do vetor é o tamanho do vetor alocado na memória.
+    // O tamanho do vetor é o número de elementos que o vetor possui.
+    // O vetor é alocado na memória com um tamanho inicial, e quando o vetor atinge o tamanho máximo, ele é duplicado.
+    // O vetor é duplicado quando o tamanho máximo é atingido, e não quando o tamanho do vetor é atingido.
+    println!("Capacidade: {}", notas.capacity());
+    println!("Tamanho do vetor: {}", notas.len());
+    println!("Vetor: {:?}", notas);
+    println!("Primeira nota: {}", notas[0]);
+
+    // O & é para retornar um ponteiro para o valor, e não o valor em si.
+    // O unwrap irá gerar um panic se o valor for None.
+    // unwrap_or retorna o valor do Option, ou o valor passado como parâmetro se o valor for None.
+    println!("Nota 6 = {}", notas.get(5).unwrap_or(&0.0));
+    //println!("Nota 6 = {}", notas.get(5).unwrap());
+
+    // O método get retorna um Option, que pode ser Some ou None.
+    // O método get retorna um ponteiro para o valor, e não o valor em si.
+    println!(
+        "Nota 6 = {}",
+        match notas.get(4) {
+            Some(nota) => nota,
+            None => &0.0,
+        }
+    );
+
+    /*
+    // O método pop remove o último valor do vetor e retorna um Option.
+    while let Some(nota) = notas.pop() {
+        println!("Valor removido: {}", nota);
+    }
+     */
+
+    // O método iter retorna um iterador.
+    // O iterador é um objeto que pode ser usado para iterar sobre os valores do vetor.
+    for nota in notas.iter() {
+        println!("Nota no for: {}", nota);
+    }
+
+    // O iter_mut retorna um iterador mutável, que pode ser usado para iterar sobre os valores do vetor e alterá-los.
+    // O iterador mutável é um objeto que pode ser usado para iterar sobre os valores do vetor e alterá-los.
+    for nota in notas.iter_mut() {
+        *nota *= 2.0;
+    }
+
+    // Para que o Vec seja percorrido, uma função chamada into_iter é chamada recebendo o Vec por parâmetro, 
+    // logo, o borrowing precisa ser levado em consideração.
+    for nota in &notas {
+        println!("Nota no for borrowing: {}", nota);
+    }
+
+    println!("Vetor: {:?}", notas);
 }
