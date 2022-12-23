@@ -11,6 +11,7 @@ fn main() {
     // Para resolver esse problema, podemos usar um enum.
     println!("Fim de semana: {}", eh_fim_de_semana(DiaDaSemana::Quarta));
     cores();
+    conteudo_opcional();
 }
 
 fn manipulando_arrays() {
@@ -110,4 +111,48 @@ enum Color {
         yellow: u8,
         black: u8,
     }, // struct
+}
+
+fn conteudo_opcional() {
+    let conteudo_arquivo = ler_arquivo(String::from("arquivo.txt"));
+
+    match &conteudo_arquivo {
+        Some(conteudo) => println!("Conteúdo do arquivo: {}", conteudo),
+        None => println!("Arquivo não encontrado"),
+    };
+
+    // Exibição de debug no Rust é feita com o {:?}
+    println!("{:?}", conteudo_arquivo);
+
+    // Prelude do Rust já possui o método unwrap que retorna o valor do Option.
+    // Se o valor for None, o unwrap irá gerar um panic.
+    // if let é como um match, mas só funciona com Option. Se o valor for Some, ele irá executar o bloco. Se for None, ele irá ignorar.
+    // O if let é uma forma de desestruturar o Option.
+    // O while let é parecido com o if let, mas ele executa o bloco enquanto o valor for Some.
+    // Usar if let é uma outra forma de podermos aplicar pattern matching em rust, além do match statement. https://doc.rust-lang.org/rust-by-example/flow_control/if_let.html
+    if let Some(valor) = conteudo_arquivo {
+        println!("Conteúdo do arquivo: {}", valor);
+    }
+
+    /*
+    while let Some(valor) = conteudo_arquivo {
+        println!("Conteúdo do arquivo: {}", valor);
+    }
+    */
+
+    // O unwrap_or_else é parecido com o unwrap_or, mas recebe uma função como parâmetro.
+    /*
+    println!(
+        "Conteúdo do arquivo: {}",
+        conteudo_arquivo.unwrap_or(String::from(""))
+    );
+    */
+}
+
+fn ler_arquivo(nome_arquivo: String) -> Option<String> {
+    if nome_arquivo == String::from("arquivo.txt") {
+        Some(String::from("Conteúdo do arquivo"))
+    } else {
+        None
+    }
 }
